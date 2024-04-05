@@ -14,3 +14,53 @@
 *.tbz2
 *.tgz
 *.zip
+
+# Python files #
+################
+# meson build/installation directories
+build
+build-install
+# meson python output
+.mesonpy-native-file.ini
+# sphinx build directory
+_build
+# dist directory is where sdist/wheel end up
+dist
+doc/build
+doc/docenv
+doc/cdoc/build
+# Egg metadata
+*.egg-info
+# The shelf plugin uses this dir
+./.shelf
+.cache
+pip-wheel-metadata
+.python-version
+
+# OS generated files #
+######################
+.DS_Store*
+.VolumeIcon.icns
+.fseventsd
+Icon?
+.gdb_history
+ehthumbs.db
+Thumbs.db
+.directory
+
+# pytest generated files #
+##########################
+/.pytest_cache
+
+# Compiled source #
+###################
+*.a
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.o.d
+*.py[ocd]
+*.so
+*.mod
