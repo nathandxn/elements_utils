@@ -22,7 +22,7 @@ setup(
     ],
     install_requires=[],
     extras_require={
-        "dev": ["pytest>=7.0", "twine>=4.0.2"],
+        "dev": ["pytest>=7.0", "black>=24.3.0", "pyprojroot>=0.3.0"],
     },
     python_requires=">=3.10",
 )
