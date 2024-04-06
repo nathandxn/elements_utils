@@ -1,5 +1,8 @@
 """Helper functions for data manipulation and processing"""
 
+__version__ = "0.0.1"
+__author__ = "Nathan Dixon"
+
 from re import sub
 
 
