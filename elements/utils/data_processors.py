@@ -7,7 +7,7 @@ from re import sub
 
 
 # some formatting helper functions
-def snake_case(text):
+def snake_case(text: str) -> str:
     """This function is used for converting strings to snake_case."""
 
     if text is None:
