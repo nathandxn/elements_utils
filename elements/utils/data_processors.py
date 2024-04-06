@@ -4,10 +4,11 @@ __version__ = "0.0.1"
 __author__ = "Nathan Dixon"
 
 from re import sub
+from typing import Union
 
 
 # some formatting helper functions
-def snake_case(text: str) -> str:
+def snake_case(text: str) -> Union[str, None]:
     """This function is used for converting strings to snake_case."""
 
     if text is None:
