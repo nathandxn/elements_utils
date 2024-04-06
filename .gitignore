@@ -96,3 +96,9 @@ GSYMS
 GTAGS
 .cache
 .mypy_cache/
+
+# IPython Notebook
+.ipynb_checkpoints
+
+# Spyder project settings
+.spyderproject
