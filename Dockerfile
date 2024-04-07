@@ -9,3 +9,6 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 # copy code to the folder
 COPY . /app
+
+# install the library
+CMD ["pip", "install", "."]
