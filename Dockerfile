@@ -6,3 +6,6 @@ WORKDIR /app
 # install dependencies
 COPY ./requirements.txt /app
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
+
+# copy code to the folder
+COPY . /app
