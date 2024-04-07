@@ -11,4 +11,4 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 COPY . /app
 
 # install the library
-CMD ["pip", "install", "."]
+CMD pip install . && python
