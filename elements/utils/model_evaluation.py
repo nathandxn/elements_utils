@@ -6,6 +6,23 @@ __author__ = "Nathan Dixon"
 import pandas as pd
 import numpy as np
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+from IPython.display import display
+
+from sklearn.calibration import calibration_curve
+from sklearn.metrics import (
+    roc_curve,
+    roc_auc_score,
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    r2_score,
+    confusion_matrix,
+    ConfusionMatrixDisplay,
+)
+
 
 def classification_model_report(results_df, display_labels, threshold = 0.50):
     """
