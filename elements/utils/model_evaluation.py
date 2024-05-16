@@ -24,9 +24,9 @@ from sklearn.metrics import (
 )
 
 
-def classification_model_report(results_df, display_labels, threshold = 0.50):
+def classification_model_report(results_df, display_labels, threshold=0.50):
     """
-    Generates common classification evaluation plots and statistics from a dataframe of actuals and predicted 
+    Generates common classification evaluation plots and statistics from a dataframe of actuals and predicted
     probabilities. Plots include ROC curve, calibration plots, and F1-curve.
 
     Args:
@@ -38,26 +38,28 @@ def classification_model_report(results_df, display_labels, threshold = 0.50):
     """
 
     report_df = results_df.copy()
-    report_df['predicted'] = np.where(report_df.predicted_prob >= threshold, 1, 0)
+    report_df["predicted"] = np.where(
+        report_df.predicted_prob >= threshold, 1, 0
+    )
 
     fpr, tpr, _ = roc_curve(report_df.actual, report_df.predicted_prob)
     roc_auc = roc_auc_score(report_df.actual, report_df.predicted_prob)
-    plt.figure(figsize = (9, 6.5))
+    plt.figure(figsize=(9, 6.5))
     lw = 2
     plt.plot(
         fpr,
         tpr,
-        color = "darkorange",
+        color="darkorange",
         lw=lw,
-        label="ROC curve (area = %0.2f)" % roc_auc
+        label="ROC curve (area = %0.2f)" % roc_auc,
     )
-    plt.plot([0, 1], [0, 1], color = "navy", lw = lw, linestyle = "--")
+    plt.plot([0, 1], [0, 1], color="navy", lw=lw, linestyle="--")
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
     plt.xlabel("False Positive Rate")
     plt.ylabel("True Positive Rate")
     plt.title("Receiver Operating Characteristic Curve")
-    plt.legend(loc = "lower right")
+    plt.legend(loc="lower right")
     plt.show()
     print("AUC Score is: {:4f}".format(roc_auc))
     print("Classification Metrics Assuming 50% Predicted Prob Cutoff:")
@@ -76,25 +78,38 @@ def classification_model_report(results_df, display_labels, threshold = 0.50):
             recall_score(report_df.actual, report_df.predicted)
         )
     )
-    print("F1-Score is: {:4f}".format(f1_score(report_df.actual, report_df.predicted)))
+    print(
+        "F1-Score is: {:4f}".format(
+            f1_score(report_df.actual, report_df.predicted)
+        )
+    )
 
-    ConfusionMatrixDisplay(confusion_matrix(report_df.actual, report_df.predicted), display_labels = display_labels).plot(values_format='')
+    ConfusionMatrixDisplay(
+        confusion_matrix(report_df.actual, report_df.predicted),
+        display_labels=display_labels,
+    ).plot(values_format="")
     plt.show()
 
     display(results_df.describe())
 
-    fig, ax = plt.subplots(figsize = (11, 5.5))
+    fig, ax = plt.subplots(figsize=(11, 5.5))
     sns.kdeplot(
-        data = report_df, x = "predicted_prob", hue = "actual", common_norm = False, ax = ax
-    ).set(title = "Distribution of Predicted Probabilities by Actual Class")
+        data=report_df,
+        x="predicted_prob",
+        hue="actual",
+        common_norm=False,
+        ax=ax,
+    ).set(title="Distribution of Predicted Probabilities by Actual Class")
     plt.show()
     prob_true, prob_pred = calibration_curve(
-        report_df.actual, report_df.predicted_prob, n_bins = 20
+        report_df.actual, report_df.predicted_prob, n_bins=20
     )
-    plt.figure(figsize = (11, 5.5))
+    plt.figure(figsize=(11, 5.5))
     low = 2
-    plt.plot(prob_pred, prob_true, color = "blue", lw = lw, linestyle = "-", marker = "s")
-    plt.plot([0, 1], [0, 1], color = "grey", lw = lw, linestyle = "--")
+    plt.plot(
+        prob_pred, prob_true, color="blue", lw=lw, linestyle="-", marker="s"
+    )
+    plt.plot([0, 1], [0, 1], color="grey", lw=lw, linestyle="--")
     plt.ylabel("Fraction of positives")
     plt.xlabel("Mean Predicted Probability")
     plt.title("Calibration Curve")
@@ -121,22 +136,22 @@ def classification_model_report(results_df, display_labels, threshold = 0.50):
     class_metrics_df = pd.DataFrame(class_metrics)
 
     best_cutoff = class_metrics_df.sort_values(
-        "f1_score", ascending = False
+        "f1_score", ascending=False
     ).cutoff.values[0]
 
-    plt.figure(figsize = (11, 5.5))
+    plt.figure(figsize=(11, 5.5))
     lw = 2
     plt.plot(
         class_metrics_df.cutoff,
         class_metrics_df.f1_score,
-        color = "red",
-        lw = lw,
-        linestyle = "-",
-        marker = "s",
-        label = "F1-score is maximized at cutoff: %0.4f" % best_cutoff,
+        color="red",
+        lw=lw,
+        linestyle="-",
+        marker="s",
+        label="F1-score is maximized at cutoff: %0.4f" % best_cutoff,
     )
     plt.ylabel("F1-Score")
     plt.xlabel("Probability Cutoff")
     plt.title("F1-Score Curve")
-    plt.legend(loc = "upper right")
+    plt.legend(loc="upper right")
     plt.show()
