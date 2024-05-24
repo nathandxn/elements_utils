@@ -8,7 +8,7 @@ with open("LICENSE") as f:
 
 setup(
     name="elements",
-    version="0.1.0",
+    version="0.2.0",
     description="Utility functions and classes for data applications",
     packages=find_packages(exclude=("tests", "docs")),
     long_description=long_description,
