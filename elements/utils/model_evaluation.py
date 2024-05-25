@@ -1,6 +1,6 @@
 """Helper functions for evaluating predictive models"""
 
-__version__ = "0.0.1"
+__version__ = "0.3.0"
 __author__ = "Nathan Dixon"
 
 import pandas as pd
@@ -22,6 +22,39 @@ from sklearn.metrics import (
     confusion_matrix,
     ConfusionMatrixDisplay,
 )
+
+
+def plot_feature_importance(
+    feature_importance,
+    columns,
+    top_n,
+    plot_width,
+    plot_height,
+    title="Feature Importance",
+):
+    """Generates a feature importance horizontal bar plot."""
+
+    feature_imp = pd.DataFrame(
+        sorted(zip(feature_importance, columns)), columns=["Value", "Feature"]
+    )
+    # taking min of length of columns array and top_n arg in case the value passed is out of range
+    top_n = np.min([len(columns), top_n])
+    top_n_features = feature_imp.sort_values(
+        by="Value", ascending=False
+    ).reset_index(drop=True)["Value"][top_n - 1]
+
+    # plot it
+    plt.figure(figsize=(plot_width, plot_height))
+    sns.barplot(
+        x="Value",
+        y="Feature",
+        data=feature_imp[feature_imp.Value >= top_n_features].sort_values(
+            by="Value", ascending=False
+        ),
+    )
+    plt.title(title)
+    plt.tight_layout()
+    plt.show()
 
 
 def classification_model_report(results_df, display_labels, threshold=0.50):
