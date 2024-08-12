@@ -5,6 +5,8 @@ __author__ = "Nathan Dixon"
 
 import pandas as pd
 import numpy as np
+import scipy.stats as st
+import math
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -188,3 +190,80 @@ def classification_model_report(results_df, display_labels, threshold=0.50):
     plt.title("F1-Score Curve")
     plt.legend(loc="upper right")
     plt.show()
+
+
+def regression_evaluation(results_df):
+    """
+    This function generates plots and statistics for evaluating RC1 insurance score regression models.
+    """
+
+    display(round(results_df.describe(), 2))
+    print(
+        "Spearman Correlation is: {:.4f}".format(
+            st.spearmanr(results_df.actual, results_df.predicted).correlation
+        )
+    )
+    print(
+        "Pearson Correlation is: {:.4f}".format(
+            st.pearsonr(results_df.actual, results_df.predicted)[0]
+        )
+    )
+    print(
+        "RMSE is: {:.4f}".format(
+            math.sqrt(np.mean((results_df.actual - results_df.predicted) ** 2))
+        )
+    )
+    print(
+        "MAE is: {:.4f}".format(
+            np.mean(abs(results_df.actual - results_df.predicted))
+        )
+    )
+    print(
+        "R2 is: {:.4f}".format(
+            r2_score(results_df.actual, results_df.predicted)
+        )
+    )
+
+    sns.displot(results_df, x="residual", kind="hist").set(
+        title="Residual Distribution"
+    )
+    plt.show()
+    sns.regplot(
+        data=results_df,
+        x="predicted",
+        y="actual",
+        scatter=True,
+        scatter_kws={"alpha": 0.30},
+        line_kws={"color": "r"},
+    ).set(title="Regression Plot Actual vs Predicted")
+
+    plt.ylabel("Actual")
+    plt.xlabel("Predicted")
+    plt.show()
+
+    sns.boxplot(data=results_df, x="actual", y="predicted_binned").set(
+        title="Actual by Prediction Bin"
+    )
+    # plt.axvline(x = 700, color = "g", linestyle = "--")
+    # plt.axvline()
+    plt.ylabel("Predicted Binned")
+    plt.xlabel("Actual")
+    plt.show()
+    sns.displot(
+        results_df,
+        x="actual",
+        hue="predicted_binned",
+        kind="kde",
+        fill=False,
+        common_norm=False,
+    ).set(title="Actual Distribution by Prediction Bin")
+    plt.xlabel("Actual")
+    plt.show()
+    display(
+        round(
+            results_df.groupby("predicted_binned").actual.agg(
+                ["mean", "median", "std", "count"]
+            ),
+            2,
+        )
+    )
